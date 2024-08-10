@@ -25,6 +25,7 @@ app = FastAPI()
 app.mount('/src/static', StaticFiles(directory='src/static'), name="static")
 app.include_router(SignUpRouter)
 
+
 @app.get('/')
 async def root():
     return {'hello':'index1'}

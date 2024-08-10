@@ -3,9 +3,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
 
-    margin: 0;
+    margin: auto;
     width: 50%;
     position: absolute;
     top: 50%;
@@ -18,10 +17,11 @@
 
     border-radius: 6px;
     outline: 2px solid darkgray;
-    background: rgba(23, 23, 203, 0.15);
+    background: rgba(41, 0, 248, 0.35);
 }
 
 .signup-table{
+    border-collapse: separate;
     margin: 60;
     /* display: flex;
     justify-content: center;
@@ -67,6 +67,9 @@ input.data-field:hover{
     float: right;
     /* margin-top: 10px; */
 }
-/* body{
-    background-image: url('/src/static/spirals.jpg');
-} */
+body{
+    background-image: url('/src/static/pineapple.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}

@@ -9,6 +9,7 @@ class Authenticator():
         self.SessionTable: Dict[str, str] = {}
 
     def CreateUser(self, user: User) -> bool:
+        
         existing_user = next((u for u in self.UserTable if user.email == u.email or user.username == u.username))
         if existing_user is None:
             self.UserTable.append(user)
