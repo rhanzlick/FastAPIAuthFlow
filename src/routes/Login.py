@@ -13,10 +13,9 @@ from ..models.User import User
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory='src/templates')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-route_name = 'signup'
+route_name = 'login'
 
 Router = APIRouter(
     prefix=f'/{route_name}',
@@ -29,13 +28,6 @@ Router = APIRouter(
 )
 
 Router.mount('/src/static', StaticFiles(directory='src/static'), name="static")
-
-@Router.get('/')
-async def SignUpPage(req:Request):
-    context = {
-        'request':req,
-    }
-    return templates.TemplateResponse('signup.html', context)
 
 @Router.post('/')
 async def UserSignup(user:User, db:Database = Depends(get_db)):

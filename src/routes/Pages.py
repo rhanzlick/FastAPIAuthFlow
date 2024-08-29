@@ -3,20 +3,20 @@ from typing import Annotated, List, Union, Dict
 
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from fastapi.responses import HTMLResponse
+#from fastapi.responses import HTMLResponse
 
 
-from ..models.Authenticator import Authenticator
-from ..models.Database import Database, get_db
-from ..models.User import User
+# from ..models.Authenticator import Authenticator
+# from ..models.Database import Database, get_db
+# from ..models.User import User
 
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
+# templates = Jinja2Templates(directory='src/templates')
 templates = Jinja2Templates(directory='src/templates')
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-route_name = 'signup'
+route_name = 'pages'
 
 Router = APIRouter(
     prefix=f'/{route_name}',
@@ -30,23 +30,17 @@ Router = APIRouter(
 
 Router.mount('/src/static', StaticFiles(directory='src/static'), name="static")
 
-@Router.get('/')
+@Router.get('/signup')
 async def SignUpPage(req:Request):
     context = {
         'request':req,
     }
     return templates.TemplateResponse('signup.html', context)
 
-@Router.post('/')
-async def UserSignup(user:User, db:Database = Depends(get_db)):
-    if user.username in db.Users:
-        raise HTTPException(400, 'Username already exists')
-    
-    hashed = db.HashPass(user.password)
-    db.Users[user.username] = {
-        'email':user.email,
-        'username':user.username,
-        'password': hashed
+@Router.get('/home')
+async def SignUpPage(req:Request):
+    context = {
+        'request':req,
     }
-    return {'message': 'user created successfully'}
+    return templates.TemplateResponse('home.html', context)
 

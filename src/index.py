@@ -2,42 +2,48 @@ import uuid, secrets, asyncio
 from typing import Annotated, List, Union
 
 from fastapi import FastAPI, Depends, Request, Form, status, HTTPException
+# from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.staticfiles import StaticFiles
-from starlette.responses import RedirectResponse
-#from starlette.templating import Jinja2Templates
-from fastapi.templating import Jinja2Templates
+# from starlette.staticfiles import StaticFiles
+# from starlette.responses import RedirectResponse
+# from starlette.templating import Jinja2Templates
 
-from .routes.SignUp import Router as SignUpRouter
-from .models.User import User
 
-templates = Jinja2Templates(directory='src/templates')
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# templates = Jinja2Templates(directory='src/templates')
+
+# from models.User import User
+# from models.Authenticator import Authenticator
+
+#from routes.Pages import Router as PageRouter
+from routes.User import Router as UserRoutuer
+#from routes.SignUp import Router as SignUpRouter
+
 
 app = FastAPI()
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_credentials=True,
-#     allow_origins=[''],
-#     allow_methods=['*'],
-#     allow_headers=['*'])
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=[''],
+    allow_methods=['*'],
+    allow_headers=['*'])
 
-app.mount('/src/static', StaticFiles(directory='src/static'), name="static")
-app.include_router(SignUpRouter)
-
+# app.mount('/src/static', StaticFiles(directory='src/static'), name="static")
 
 @app.get('/')
 async def root():
-    return {'hello':'index1'}
+    
+    return {'routes':', '.join([str(r.path) for r in app.routes])}
 
-@SignUpRouter.get('/')
-async def SignUpPage(req:Request):
-    context = {
-        'request':req,
-    }
-    return templates.TemplateResponse('signup.html', context)
+app.include_router(UserRoutuer)
+# app.include_router(PageRouter)
+#app.include_router(SignUpRouter)
+
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("src.index:app", host="0.0.0.0", port=8_000, reload=True)
+    # uvicorn.run("src.index:app", host="0.0.0.0", port=8_000, reload=True)
+    uvicorn.run("index:app", host="0.0.0.0", port=8_000, reload=True)
 
