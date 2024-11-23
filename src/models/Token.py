@@ -16,7 +16,7 @@ class Token(BaseModel):
 
     @staticmethod
     # def Encode(user:User):
-    def Encode(user:dict, expire_duration:float = 30):
+    def Encode(user:dict, expire_duration:float = 30) -> str:
         expiry = datetime.datetime.now(datetime.timezone.utc) + timedelta(minutes = expire_duration)
         payload = {
             'user_id': user.get('username'),
@@ -30,7 +30,7 @@ class Token(BaseModel):
         )
 
     @staticmethod
-    def Decode(token:str):
+    def Decode(token:str) -> 'Token':
 
         decoded = jwt.decode(
             token,
