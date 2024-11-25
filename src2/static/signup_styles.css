@@ -1,0 +1,57 @@
+body{
+    display: grid;
+    grid-template-rows:repeat(3,1fr);
+    /* grid-template-rows:minmax(100px, auto); */
+    grid-template-columns:repeat(3,1fr);
+
+    /* background-image: url('/src/static/pineapple.png'); */
+    background-color:darkslategray;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.signup-container{
+
+    row-gap: 5px;
+    grid-column:2;
+    grid-row:2;
+    
+    display: grid;
+    grid-template-columns:repeat(5,1fr);
+    grid-template-rows:repeat(4,1fr);
+
+    border-radius: 6px;
+    outline: 2px solid darkgray;
+    background: rgba(41, 0, 248, 0.35);
+    min-width: 400px;
+    padding: 20px;
+
+}
+
+.prompt{
+    grid-row: auto;
+    grid-column: 2;
+    text-align: right;
+    vertical-align: bottom;
+    margin-right: 20px;
+
+}
+
+.data-field{
+    grid-row: auto;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    padding: 6px;
+
+}
+
+
+input.data-field:hover{
+    background-color: lightgray;
+}
+
+.submit-btn{
+    grid-row: 4;
+    grid-column: 4;
+}
