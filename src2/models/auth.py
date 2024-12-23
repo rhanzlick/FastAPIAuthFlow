@@ -2,13 +2,16 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 # from fastapi import FastAPI, Depends, Request, Form, status, HTTPException
 from fastapi import APIRouter, Request, Depends, HTTPException
 
-token_path = 'token'
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl = token_path)
+import uuid
 
+# token_path = 'token'
+token_path = 'login'
 route_name = 'auth'
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl = f'{token_path}')
+
 
 router = APIRouter(
-    prefix=f'/{route_name}',
+    # prefix=f'/{route_name}',
     tags=[route_name],
     #dependencies=Depends(),
     responses={
@@ -20,16 +23,25 @@ router = APIRouter(
 # auth.py
 def get_current_user(token: str = Depends(oauth2_scheme)):
     # Validate token and return user
-    pass
+    uname, password, ID = token.split('|')
+    return {
+        'username':uname,
+        'email':'',
+        'password':password,
+        'ID': uuid.UUID(ID) if ID else None,
+    }
+
+    
 
 @router.post(f'/{token_path}')
+# @router.post(f'/login')
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
     #check if username is in db
     #check if entered pass matches hashed pass
     #return token
-    token = ''
-    return {'token_type':'bearer', 'access_token':token}
+    token = uuid.uuid4()
+    return {'token_type':'bearer', 'access_token':f'{form_data.username}|{form_data.password}|{str(token)}'}
 
     # user_record = full_db['users'].get(form_data.username)
     # if not user_record:

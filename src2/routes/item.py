@@ -1,5 +1,5 @@
 import uuid
-from typing import List
+from typing import List, Union
 from pydantic import BaseModel
 import random
 
@@ -7,8 +7,10 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
 
-from app.src2.models import auth
-from app.src2.routes.user import User
+from models import auth
+from routes.user import User
+# from app.src2.models import auth
+# from app.src2.routes.user import User
 
 class Item(BaseModel):
     ID: uuid.UUID = None
@@ -19,7 +21,7 @@ class Item(BaseModel):
     def GetItems(user_id: uuid.UUID) -> List['Item']:
 
         items = []
-        for idx in range(random.randint(10)):
+        for idx in range(random.randint(0, 10)):
             items.append(
                 Item(
                     ID = uuid.uuid4(),
@@ -36,7 +38,7 @@ route_name = 'item'
 router = APIRouter(
     prefix=f'/{route_name}',
     tags=[route_name],
-    dependencies=Depends(auth.get_current_user),
+    # dependencies=[Depends(auth.get_current_user)],
     responses={
         401: {'description': 'Unauthorized'},
         404: {'description': 'Page Not Found'},
@@ -56,16 +58,28 @@ router = APIRouter(
 
 #In[] Routes
 
-@router.get("", response_model = List[Item])
+@router.get("")
+# @router.get("", response_model = List[Union[User,Item]])
 # def read_items(current_user: User = Depends(auth.get_current_user)):
-def read_items(current_user: User):
+async def read_items(current_user: User = Depends(auth.get_current_user)):
 
-    return Item.GetItems(current_user.ID)
+    current_user = User(**current_user)
+    print(current_user)
+
+    items = Item.GetItems(current_user.ID)
+
+    print(f'items found: ({len(items)})')
+
+    # items.insert(0, current_user)
+    # return items
+
+    return [current_user, *items]
 
 @router.post("/create")
 # def read_items(new_item: Item, current_user: User = Depends(auth.get_current_user)):
-def read_items(new_item: Item, current_user: User):
+async def create_item(new_item: Item, current_user: User = Depends(auth.get_current_user)):
 
+    current_user = User(**current_user)
     return Item.GetItems(current_user.ID)
 
 

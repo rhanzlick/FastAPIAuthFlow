@@ -13,9 +13,11 @@ class User(BaseModel):
     password:str
     ID: uuid.UUID = None
 
-from app.src2.models import auth
+# from src2.models import auth
+# from app.src2.models import auth
+from models import auth
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 route_name = 'user'
 
@@ -43,12 +45,12 @@ router = APIRouter(
 #In[] Routes
 
 @router.get("/me")
-def get_user(current_user: User = Depends(auth.get_current_user)):
+async def get_user(current_user: User = Depends(auth.get_current_user)):
     return current_user
 
 
 @router.post("/create")
-def create_user(current_user: User):
+async def create_user(current_user: User):
 
     pass
     # user_record = full_db['users'].get(new_user.username)
